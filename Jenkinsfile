@@ -20,9 +20,22 @@ pipeline {
                 sh "jupyter-nbconvert --output-dir=out --ExecutePreprocessor.timeout=None --execute 'Reported road casualties in Great Britain, provisional estimates involving illegal alcohol levels.ipynb'"
             }
         }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'cloudfluff/csvlint'
+                    reuseNode true
+                }
+            }
+            steps {
+                script {
+                    sh "csvlint -s RAS45003-schema.json"
+                }
+            }
+        }
         stage('Review') {
             steps {
-                error "Needs review"
+                error "RAS51001.csv needs review and also need to understand whether these are distinct datasets"
             }
         }
     }
