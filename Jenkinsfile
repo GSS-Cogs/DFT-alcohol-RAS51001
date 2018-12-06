@@ -47,6 +47,7 @@ pipeline {
             script {
                 archiveArtifacts 'out/*'
                 updateCard "5b4f2a6f95cdf30512448eee"
+                updateCard "5b4f29ecee119328508a6529"
             }
         }
     }
