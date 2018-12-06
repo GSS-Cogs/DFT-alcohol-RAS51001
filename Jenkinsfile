@@ -31,6 +31,7 @@ pipeline {
                 script {
                     ansiColor('xterm') {
                         sh "csvlint -s RAS45003-schema.json"
+                        sh "csvlint -s RAS51001-schema.json"
                     }
                 }
             }
