@@ -29,7 +29,9 @@ pipeline {
             }
             steps {
                 script {
-                    sh "csvlint -s RAS45003-schema.json"
+                    ansiColor('xterm') {
+                        sh "csvlint -s RAS45003-schema.json"
+                    }
                 }
             }
         }
@@ -41,7 +43,10 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts 'out/*'
+            script {
+                archiveArtifacts 'out/*'
+                updateCard "5b4f2a6f95cdf30512448eee"
+            }
         }
     }
 }
