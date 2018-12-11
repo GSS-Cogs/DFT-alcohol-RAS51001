@@ -58,7 +58,7 @@
           }
         }],
         "primaryKey": [
-          "period", "severity", "measure_type", "value", "unit", "revision"
+          "period", "severity", "measure_type", "unit", "revision"
         ]
       }
     }
