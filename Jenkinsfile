@@ -20,8 +20,11 @@ pipeline {
                 }
             }
             steps {
-                sh "jupyter-nbconvert --output-dir=out --ExecutePreprocessor.timeout=None --execute 'Estimated number of reported drink drive accidents and casualties in Great Britain 1979 - 2016.ipynb'"
-                sh "jupyter-nbconvert --output-dir=out --ExecutePreprocessor.timeout=None --execute 'Reported road casualties in Great Britain, provisional estimates involving illegal alcohol levels.ipynb'"
+                script {
+                    ansiColor('xterm') {
+                        sh "jupyter-nbconvert --output-dir=out --ExecutePreprocessor.timeout=None --execute main.ipynb"
+                    }
+                }
             }
         }
         stage('Test') {
@@ -34,23 +37,36 @@ pipeline {
             steps {
                 script {
                     ansiColor('xterm') {
-                        sh "csvlint -s RAS45003-schema.json"
-                        sh "csvlint -s RAS51001-schema.json"
+                        sh "csvlint -s schema.json"
                     }
                 }
             }
         }
-        stage('Review') {
+        stage('Upload draftset') {
             steps {
-                error "RAS51001.csv needs review and also need to understand whether these are distinct datasets"
+                script {
+                    jobDraft.replace()
+                    uploadTidy(['out/observations.csv'],
+                               'https://github.com/ONS-OpenData/ref_alcohol/raw/master/columns.csv')
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                script {
+                    jobDraft.publish()
+                }
             }
         }
     }
     post {
         always {
             script {
-                archiveArtifacts 'out/*'
-                updateCard "5b4f2a6f95cdf30512448eee"
+                archiveArtifacts artifacts: 'out/*', excludes: 'out/*.html'
+                publishHTML([
+                    allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true,
+                    reportDir: 'out', reportFiles: 'main.html',
+                    reportName: 'Transform'])
                 updateCard "5b4f29ecee119328508a6529"
             }
         }
