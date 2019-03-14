@@ -62,7 +62,8 @@
         "primaryKey": [
           "period",
           "severity",
-          "measure_type"
+          "measure_type",
+          "unit"
         ]
       }
     }
