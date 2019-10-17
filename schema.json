@@ -7,8 +7,9 @@
   ],
   "tables": [
     {
-      "url": "http://ons-opendata.github.io/ref_alcohol/codelists/severity.csv",
-      "tableSchema": "https://ons-opendata.github.io/ref_common/codelist-schema.json"
+      "url": "https://gss-cogs.github.io/ref_alcohol/codelists/severity.csv",
+      "tableSchema": "https://gss-cogs.github.io/ref_common/codelist-schema.json",
+      "suppressOutput": true
     },
     {
       "url": "out/observations.csv",
@@ -17,44 +18,53 @@
           {
             "titles": "Period",
             "required": true,
-            "name": "period"
+            "name": "period",
+            "datatype": {
+              "format": "^(year/[0-9]{4}|gregorian-interval/.*|month/[0-9]{4}-[0-9]{2}|day/[0-9]{4}-[0-9]{2}-[0-9]{2}|quarter/[0-9]{4}-Q[1-4]|government-year/[0-9]{4}-[0-9]{4})$"
+            }
           },
           {
             "titles": "Severity",
             "required": true,
-            "name": "severity"
+            "name": "severity",
+            "datatype": "string"
           },
           {
             "titles": "Measure Type",
             "required": true,
-            "name": "measure_type"
+            "name": "measure_type",
+            "datatype": "string"
           },
           {
             "titles": "Value",
-            "required": true,
-            "name": "value"
+            "required": false,
+            "name": "value",
+            "datatype": "number"
           },
           {
             "titles": "CI Lower",
             "required": false,
-            "name": "ci_lower"
+            "name": "ci_lower",
+            "datatype": "number"
           },
           {
             "titles": "CI Upper",
             "required": false,
-            "name": "ci_upper"
+            "name": "ci_upper",
+            "datatype": "number"
           },
           {
             "titles": "Unit",
-            "required": false,
-            "name": "unit"
+            "required": true,
+            "name": "unit",
+            "datatype": "string"
           }
         ],
         "foreignKeys": [
           {
             "columnReference": "severity",
             "reference": {
-              "resource": "http://ons-opendata.github.io/ref_alcohol/codelists/severity.csv",
+              "resource": "https://gss-cogs.github.io/ref_alcohol/codelists/severity.csv",
               "columnReference": "notation"
             }
           }
@@ -63,7 +73,7 @@
           "period",
           "severity",
           "measure_type",
-          "Unit"
+          "unit"
         ]
       }
     }
